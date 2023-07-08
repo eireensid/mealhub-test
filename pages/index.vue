@@ -9,9 +9,11 @@
     </thead>
     <tbody>
         <tr v-for="comment in comments" :key="comment.id">
-            <td>{{comment.id}}</td>
-            <td>{{comment.name}}</td>
-            <td>{{comment.email}}</td>
+            <NuxtLink :to="`comments/${comment.id}`">
+              <td>{{comment.id}}</td>
+              <td>{{comment.name}}</td>
+              <td>{{comment.email}}</td>
+            </NuxtLink>
         </tr>
     </tbody>
   </table>
@@ -26,7 +28,7 @@
 
   const fetchComments = async () => {
     const limit = 15
-    const url = `https://jsonplaceholder.typicode.com/comments?_page=${page.value}&_limit=${limit}`
+    const url = `${API_URL}/comments?_page=${page.value}&_limit=${limit}`
     comments.value = await fetch(url)
       .then(resp => {
         totalPages.value = Math.ceil(+(resp.headers.get('x-total-count')) / limit)
