@@ -2,7 +2,7 @@
   <table v-if="comments">
     <thead>
         <tr>
-            <th @click="sort">id</th>
+            <th @click="sortComments('change')">id</th>
             <th>name</th>
             <th>email</th>
         </tr>
@@ -37,16 +37,24 @@
 
   fetchComments()
 
-  const refetchComments = async pageNumber => {
+  const refetchComments = pageNumber => {
     page.value = pageNumber
-    fetchComments()
+    fetchComments().then(() => {
+      sortComments('init')
+    })
   } 
 
-  const sort = () => {
-    comments.value.sort((comment1, comment2) => {
-      return isIdsAsc.value ? comment2.id - comment1.id : comment1.id - comment2.id
-    })
+  const sortComments = (mode) => {
+    if (mode === 'init') {
+      comments.value.sort((comment1, comment2) => {
+        return isIdsAsc.value ? comment1.id - comment2.id : comment2.id - comment1.id
+      })
+    } else if (mode === 'change') {
+      comments.value.sort((comment1, comment2) => {
+        return isIdsAsc.value ? comment2.id - comment1.id : comment1.id - comment2.id
+      })
 
-    isIdsAsc.value = !isIdsAsc.value
+      isIdsAsc.value = !isIdsAsc.value
+    }
   }
 </script>
