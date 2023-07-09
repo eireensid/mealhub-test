@@ -3,7 +3,7 @@
     <h1>Список комментариев</h1>
     <div class="table">
       <div class="row">
-        <div class="sort" @click="sortComments('change')">
+        <div class="sort col" @click="sortComments('change')">
           <span class="head">id</span>
           <svg class="sort-ico" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
             viewBox="0 0 512 512" style="enable-background:new 0 0 512 512;" xml:space="preserve">
@@ -14,13 +14,13 @@
             </g>
           </svg>
         </div>
-        <span class="head">name</span>
-        <span class="head">email</span>
+        <span class="head col">name</span>
+        <span class="head col">email</span>
       </div>
       <NuxtLink v-for="comment in comments" :key="comment.id" class="row" :to="`comments/${comment.id}`">
-        <span class="center">{{comment.id}}</span>
-        <span>{{comment.name}}</span>
-        <span>{{comment.email}}</span>
+        <span class="center col">{{comment.id}}</span>
+        <span class="col">{{comment.name}}</span>
+        <span class="col">{{comment.email}}</span>
       </NuxtLink>
     </div>
     <div class="pagination">
@@ -59,6 +59,7 @@
     fetchComments().then(() => {
       sortComments('init')
     })
+    window.scrollTo(0,0)
   } 
 
   const sortComments = (mode) => {
@@ -77,14 +78,28 @@
 </script>
 
 <style scoped>
+.table {
+  border: 1px solid #213547;
+  border-radius: 8px;
+}
 .row {
   display: grid;
-  grid-template-columns: 40px 2fr 1fr;
-  grid-gap: 40px;
+  grid-template-columns: 60px 2fr 1fr;
+}
+.row:not(:last-child) {
+  border-bottom: 1px solid #213547;
+}
+.col {
+  padding: 8px;
+}
+.col:not(:last-child) {
+  border-right: 1px solid #213547;
 }
 .head {
   font-weight: 700;
   transition: color .25s;
+  text-transform: uppercase;
+  text-align: center;
 }
 .center {
   text-align: center;
