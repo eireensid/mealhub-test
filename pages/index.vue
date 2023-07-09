@@ -1,37 +1,45 @@
 <template>
-  <table v-if="comments">
-    <thead>
-        <tr>
-            <th @click="sortComments('change')">id</th>
-            <th>name</th>
-            <th>email</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr v-for="comment in comments" :key="comment.id">
-            <NuxtLink :to="`comments/${comment.id}`">
-              <td>{{comment.id}}</td>
-              <td>{{comment.name}}</td>
-              <td>{{comment.email}}</td>
-            </NuxtLink>
-        </tr>
-    </tbody>
-  </table>
-  <pagination @change="refetchComments" :totalPages="totalPages" :currentPage="page" />
+  <div v-if="comments">
+    <table>
+      <thead>
+          <tr>
+              <th @click="sortComments('change')">id</th>
+              <th>name</th>
+              <th>email</th>
+          </tr>
+      </thead>
+      <tbody>
+          <tr v-for="comment in comments" :key="comment.id">
+              <NuxtLink :to="`comments/${comment.id}`">
+                <td>{{comment.id}}</td>
+                <td>{{comment.name}}</td>
+                <td>{{comment.email}}</td>
+              </NuxtLink>
+          </tr>
+      </tbody>
+    </table>
+    <vue-awesome-paginate
+      :total-items="totalComments"
+      :items-per-page="limit"
+      :max-pages-shown="5"
+      v-model="page"
+      :on-click="refetchComments"
+    />
+  </div>
 </template> 
 
 <script setup>
   const page = ref(1)
-  const totalPages = ref(0)
+  const totalComments = ref(0)
   const isIdsAsc = ref(true)
   const comments = ref(null)
+  const limit = 15
 
   const fetchComments = async () => {
-    const limit = 15
     const url = `${API_URL}/comments?_page=${page.value}&_limit=${limit}`
     comments.value = await fetch(url)
       .then(resp => {
-        totalPages.value = Math.ceil(+(resp.headers.get('x-total-count')) / limit)
+        totalComments.value = Math.ceil(+(resp.headers.get('x-total-count')))
         return resp.json()
       })
       .catch((error) => error.data)
