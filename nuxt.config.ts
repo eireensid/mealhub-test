@@ -8,5 +8,6 @@ export default defineNuxtConfig({
   },
   css: [
     "~/assets/style/main.css"
-  ]
+  ],
+  modules: ['nuxt-icons']
 })
