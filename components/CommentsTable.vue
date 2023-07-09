@@ -1,30 +1,37 @@
 <template>
   <div v-if="comments">
-    <table>
-      <thead>
-          <tr>
-              <th @click="sortComments('change')">id</th>
-              <th>name</th>
-              <th>email</th>
-          </tr>
-      </thead>
-      <tbody>
-          <tr v-for="comment in comments" :key="comment.id">
-              <NuxtLink :to="`comments/${comment.id}`">
-                <td>{{comment.id}}</td>
-                <td>{{comment.name}}</td>
-                <td>{{comment.email}}</td>
-              </NuxtLink>
-          </tr>
-      </tbody>
-    </table>
-    <vue-awesome-paginate
-      :total-items="totalComments"
-      :items-per-page="limit"
-      :max-pages-shown="5"
-      v-model="page"
-      :on-click="refetchComments"
-    />
+    <h1>Список комментариев</h1>
+    <div class="table">
+      <div class="row">
+        <div class="sort" @click="sortComments('change')">
+          <span class="head">id</span>
+          <svg class="sort-ico" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+            viewBox="0 0 512 512" style="enable-background:new 0 0 512 512;" xml:space="preserve">
+            <g>
+              <path d="M100.36,229.07h311.31c23.25,0,35.6-27.51,20.14-44.89L276.15,9.06c-10.69-12.08-29.57-12.08-40.26,0L80.19,184.18
+                C64.74,201.55,77.08,229.07,100.36,229.07z M235.87,502.94c10.69,12.08,29.57,12.08,40.26,0l155.65-175.09
+                c15.48-17.38,3.13-44.86-20.14-44.86H100.36c-23.25,0-35.6,27.49-20.14,44.89L235.87,502.94z" fill="currentColor"/>
+            </g>
+          </svg>
+        </div>
+        <span class="head">name</span>
+        <span class="head">email</span>
+      </div>
+      <NuxtLink v-for="comment in comments" :key="comment.id" class="row" :to="`comments/${comment.id}`">
+        <span class="center">{{comment.id}}</span>
+        <span>{{comment.name}}</span>
+        <span>{{comment.email}}</span>
+      </NuxtLink>
+    </div>
+    <div class="pagination">
+      <vue-awesome-paginate
+        :total-items="totalComments"
+        :items-per-page="limit"
+        :max-pages-shown="5"
+        v-model="page"
+        :on-click="refetchComments"
+      />
+    </div>
   </div>
 </template>
 
@@ -68,3 +75,37 @@
     }
   }
 </script>
+
+<style scoped>
+.row {
+  display: grid;
+  grid-template-columns: 40px 2fr 1fr;
+  grid-gap: 40px;
+}
+.head {
+  font-weight: 700;
+  transition: color .25s;
+}
+.center {
+  text-align: center;
+}
+.sort {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+}
+.sort:hover .head {
+  color: #535bf2;
+}
+.sort-ico {
+  width: 16px;
+  color: #535bf2;
+}
+.pagination {
+  display: flex;
+  justify-content: center;
+  margin-top: 40px;
+}
+</style>
